@@ -86,6 +86,10 @@ filter(gapminder, country == "Mexico")
 
 mean(filter(gapminder, country == "Sweden")$lifeExp)
 
+## pipe operator `%>%` 
+gapminder %>% 
+  filter(country == "Sweden") %>% 
+  summarize(mean(lifeExp))
 ```
 
 
