@@ -78,6 +78,14 @@ str(gapminder) # looks at structure
 
 `read_csv` is from the readr package (part of tidyverse). It is not the `read.csv`, which is part of base R
 
+## Actually working with `dplyr`
+filter
+```{r dplyr}
+filter(gapminder, lifeExp < 29)
+filter(gapminder, country == "Mexico")
 
+mean(filter(gapminder, country == "Sweden")$lifeExp)
+
+```
 
 
