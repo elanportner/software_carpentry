@@ -2,10 +2,11 @@
 title: "index"
 author: "Elan Portner"
 date: "11/30/2017"
-output: html_document:
-        code_folding:hide
-        toc: true
-        toc_float: true
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
@@ -31,3 +32,38 @@ g + geom_point(aes(color = class))
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r shape scatter}
+g + geom_point(aes(shape = class))
+```
+### Use `shape`: for a bw figure
+Changed `color` to `shape`
+
+## Geoms
+
+```{r geom_examples}
+ggplot(mpg, aes(x=drv, y = hwy))+ geom_boxplot()
+
+```
+# header
+
+#### h
+
+##hjh
+
+```{r geomception}
+ggplot(mpg, aes(displ, hwy))+
+  geom_point()+
+  geom_smooth()
+
+```
+
+```{r customize plot}
+ggplot(mpg, aes(displ, hwy))+
+  geom_point()+
+  geom_smooth()+
+  labs(title = "here", x = "Diplacement (L)", y= "miles per gallon on the highway")+
+  theme_bw()+
+  theme(text =element_text(size = 16))
+
+```
