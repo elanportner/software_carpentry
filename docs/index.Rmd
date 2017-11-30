@@ -45,11 +45,6 @@ Changed `color` to `shape`
 ggplot(mpg, aes(x=drv, y = hwy))+ geom_boxplot()
 
 ```
-# header
-
-#### h
-
-##hjh
 
 ```{r geomception}
 ggplot(mpg, aes(displ, hwy))+
@@ -67,3 +62,22 @@ ggplot(mpg, aes(displ, hwy))+
   theme(text =element_text(size = 16))
 
 ```
+
+## Data Wrangling with `dplyr`
+```{r geo data stuff}
+library(tidyverse)
+
+gapminder <- readr::read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv")
+
+## useful functions to get to know your data ##
+head(gapminder)
+tail(gapminder)
+
+str(gapminder) # looks at structure
+```
+
+`read_csv` is from the readr package (part of tidyverse). It is not the `read.csv`, which is part of base R
+
+
+
+
