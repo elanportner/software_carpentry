@@ -248,3 +248,13 @@ ggplot(data = life_by_cont, aes(x = year, y = mean_lifeExp, color = continent)) 
 
 ```
 
+## spread data to a wider format using function `spread()`
+```{r}
+head(gap_long)
+gap_normal <- gap_long %>% 
+  spread(key = obs_type,
+         value = obs_values)
+
+head(gap_normal)
+```
+
