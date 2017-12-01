@@ -98,7 +98,7 @@ gapminder %>%
 ```
 
 ## select() by columns
-```{r dplyr select}
+```{r dplyr-select}
 select(gapminder, year, lifeExp)
 
 ## pipe operator `%>%` 
@@ -128,7 +128,7 @@ MODgapminder <- gapminder %>%
 # %in% lets you filter multiple levels of a given variable
 ```
 
-```{r gapminder pipe exercise}
+```{r gapminder_pipe_exercise}
 
 gapminder %>% 
   filter(country %in% c("Egypt", "Vietnam")) %>% 
@@ -152,3 +152,99 @@ gapminder %>%
   filter(gdpPercap ==max(gdpPercap))
 
 ```
+
+## joining datasets using `join()` in **tidyverse**
+```{r joining}
+co2 <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/co2.csv")
+co2 %>% head()
+co2 %>% str()
+
+#create new variable with only gapminder 207 data
+gap_2007 <- gapminder %>% 
+  filter(year == 2007)
+
+# left_join gapminder_2007 to co2 data
+lj <- left_join(gap_2007, co2, by = "country")
+lj %>%  dim()
+
+#right_joi() gapminder to co2
+rj <- right_join(gap_2007, co2)
+```
+
+## `tidyr`example datasets
+```{r import_wide-form_data}
+AirPassengers
+
+#data for examples below
+gap_wide <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder_wide.csv")
+
+## yesterdays data format
+gapminder <- readr::read_csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv')
+```
+
+## use `gather()` to turn `gap_wide` into a long format dataframe
+```{r tidyr_usage}
+
+gap_long <- gap_wide %>% 
+  gather(key = obstype_year,
+         value = obs_values)
+
+## above is not correct, need to tell R to keep first two columns
+gap_long <- gap_wide %>% 
+  gather(key = obstype_year,
+         value = obs_values,
+         dplyr::starts_with("pop"),
+         dplyr::starts_with("lifeExp"),
+         dplyr::starts_with("gdpPercap"))
+
+head(gap_long)
+
+# can also tell it what columns to ignore using `-`
+
+```
+
+## separate out the year from our newly gathered column
+```{r real_final_product_now}
+gap_long <- gap_wide %>% 
+  gather(key = obstype_year,
+         value = obs_values,
+         dplyr::starts_with("pop"),
+         dplyr::starts_with("lifeExp"),
+         dplyr::starts_with("gdpPercap")) %>%
+  separate(obstype_year,
+           into = c("obs_type", "year"),
+           sep = "_", convert = T)
+
+head(gap_long)
+
+```
+
+```{r life_exp}
+life_df <- gap_long %>% 
+  filter(obs_type == "lifeExp",
+         continent == "Americas")
+
+head(life_df)
+
+ggplot(life_df, aes(year, obs_values, color = country))+
+  geom_line()
+```
+
+
+## exercise 7.7
+```{r gathering_exercise}
+
+life_by_cont <- gap_long %>% 
+  filter(obs_type == "lifeExp",
+         year>1982) %>% 
+  group_by(continent, year) %>% 
+  summarise(mean_lifeExp = mean(obs_values))
+
+ggplot(data = life_by_cont, aes(x = year, y = mean_lifeExp, color = continent)) + 
+  geom_line() +
+  labs(title = "Mean life expectancy",
+       x = "Year",
+       y = "Age (years)") 
+
+```
+
