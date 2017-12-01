@@ -90,6 +90,65 @@ mean(filter(gapminder, country == "Sweden")$lifeExp)
 gapminder %>% 
   filter(country == "Sweden") %>% 
   summarize(mean(lifeExp))
+
+## a few more htings with filter
+gapminder %>% 
+  filter(country == "Mexico", 
+         year == 2002)
 ```
 
+## select() by columns
+```{r dplyr select}
+select(gapminder, year, lifeExp)
 
+## pipe operator `%>%` 
+gapminder %>% 
+  select(year, lifeExp)
+
+## combine what we've learned 
+gapminder %>% 
+  filter(country == "Cambodia") %>% 
+  select(-continent, - lifeExp)
+```
+
+## mutate()
+```{r mutate()}
+gapminder %>% 
+  mutate(gdp = pop*gdpPercap)
+
+## let's add an index
+gapminder %>% 
+  mutate(index = 1:nrow(gapminder))
+
+## note that these have not been saved...gapminder dataframe still only has 6 variables. Need to explicitly assign to new variable/dataframe
+
+MODgapminder <- gapminder %>% 
+  mutate(gdp = pop*gdpPercap, index = 1:nrow(gapminder))
+
+# %in% lets you filter multiple levels of a given variable
+```
+
+```{r gapminder pipe exercise}
+
+gapminder %>% 
+  filter(country %in% c("Egypt", "Vietnam")) %>% 
+  mutate(max_gdp=max(gdpPercap))
+
+## group by() so that we can get 2 maxes
+
+gapminder %>% 
+  filter(country %in% c("Egypt", "Vietnam")) %>% 
+  group_by(country) %>% 
+  summarise(max_gdp = max(gdpPercap))
+
+gapminder %>% 
+  group_by(country) %>% 
+  summarise(max_gdp = max(gdpPercap))
+
+## let's keep the year associated with the max_gdp
+gapminder %>% 
+  group_by(country) %>% 
+  # mutate(max_gdp = max(gdpPercap)) %>% 
+  filter(gdpPercap ==max(gdpPercap))
+
+```
