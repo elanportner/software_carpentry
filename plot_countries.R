@@ -29,7 +29,6 @@ ggsave(filename = png, plot = g)
 plot_country <- function(cntry){
   
   png <- paste0("gdp_", cntry, ".png")
-  
   g <- gapminder %>%
     filter(country == cntry) %>%
     ggplot(aes(x = year, y = gdpPercap)) +
@@ -43,11 +42,12 @@ plot_country <- function(cntry){
 plot_country("Afghanistan")
 
 # for: loop to iterate over some countries ----
-countries <- c("United States", "Mexico")
+countries <- as.list(unique(gapminder$country))
 
-for (k in countries){
-  
-  plot_country(k)
+for (k in 1:length(countries)){
+  country <-  countries[k]
+  cat(sprintf("%d :%s\n", k, countries[k]))
+  plot_country(country)
   
 }
 
@@ -83,7 +83,7 @@ for (k in countries){
 dir.create("developed")
 dir.create("developing")
 
-plot_country <- function(cntry, png){
+plot_country <- function(cntry, png, folder ="."){
   
   cat("plot_country(", cntry,", ", png, ")\n")
   
@@ -94,7 +94,7 @@ plot_country <- function(cntry, png){
     geom_smooth() +
     labs(title = cntry)
   
-  ggsave(filename = png, plot = g)
+  ggsave(file.path(folder, png), plot = g)
 }
 
 is_developed <- function(cntry, threshold = 12000){
@@ -102,7 +102,7 @@ is_developed <- function(cntry, threshold = 12000){
   gapminder %>%
     filter(country == cntry) %>%
     summarise(
-      mean_gdp = mean(gdpPercap)) %>%
+      mean_gdp = mean(gdpPercap)) %>% # this is a dataframe
     .$mean_gdp >= threshold
 }
 
